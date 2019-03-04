@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /usr/share/app
+    environment:
+      ENV: "develop"
+    volumes:
+    - .:/usr/share/app
+    - /usr/share/app/node_modules
+    ports:
+    - "8088:4200"
+    command: sh -c "ng serve --host 0.0.0.0 -o"
