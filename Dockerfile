@@ -1,21 +1,12 @@
-FROM tensorflow/tensorflow as node-angular-cli
-
-# Linux setup
-#RUN apk update \
-#  && apk add --update alpine-sdk \
-#  && apk del alpine-sdk \
-#  && rm -rf /tmp/* /var/cache/apk/* *.tar.gz ~/.npm \
-#  && npm cache verify \
-#  && sed -i -e "s/bin\/ash/bin\/sh/" /etc/passwd
-
-# install npm
-#RUN $NVM_DIR/nvm.sh \
-#  && nvm install --lts \
-#  && nvm alias default lts/* \
-#  && nvm use default
+FROM tensorflow/tensorflow as tensorflow_angular
 
 RUN apt-get update && apt-get -y install gnupg2
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get install -y nodejs
+
+RUN apt-get install -y curl \
+  && curl -sL https://deb.nodesource.com/setup_9.x | bash - \
+  && apt-get install -y nodejs \
+  && curl -L https://www.npmjs.com/install.sh | sh
+
 RUN nodejs -v
 RUN npm -v
 
@@ -27,7 +18,6 @@ WORKDIR /usr/share/app
 RUN npm install -g @angular/cli@7.0.6
 
 # Install App pacakges
-#COPY task-displayer* /usr/share/app/
 COPY package*.json /usr/share/app/
 RUN ls -la
 RUN npm i
