@@ -11,10 +11,6 @@ import { CANVAS_WIDTH } from '../game/constants';
 
 export class AppComponent implements OnInit {
 
-  // public linearModel: tf.Sequential;
-  // public prediction: any;
-
-  // title = 'app';
   public runner = null;
   public firstTime = true;
 
@@ -23,11 +19,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.train();
     this.setup();
   }
-
-  // initial setup for the game the  setup function is called when the dom gets loaded
 
   public setup() {
     // Initialize the game Runner.
@@ -98,21 +91,13 @@ export class AppComponent implements OnInit {
     }
   }
 
-
-  /**
-   * documentation
-   * @param {object} dino
-   * @param {object} state
-   * returns a promise resolved with an action
-   */
-
   public handleRunning(dino, state) {
     // console.log('running');
     return new Promise((resolve) => {
       if (!dino.jumping) {
         // whenever the dino is not jumping decide whether it needs to jump or not
         let action = 0; // variable for action 1 for jump 0 for not
-        // call model.predict on the state vecotr after converting it to tensor2d object
+        // call model.predict on the state vector after converting it to tensor2d object
         const _state = state ? [
           state.obstacleX / CANVAS_WIDTH,
           state.obstacleWidth / CANVAS_WIDTH,
@@ -122,7 +107,7 @@ export class AppComponent implements OnInit {
         const prediction = dino.model.predict(tf.tensor2d([_state]));
 
         // the predict function returns a tensor we get the data in a promise as result
-        // and based don result decide the action
+        // and based on result decide the action
         const predictionPromise = prediction.data();
 
         predictionPromise.then((result) => {
@@ -147,13 +132,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-
-  /**
-   *
-   * @param {object} dino
-   * handles the crash of a dino before restarting the game
-   *
-   */
   public handleCrash(dino) {
     // console.log('crash');
     let input = null;
@@ -188,47 +166,4 @@ export class AppComponent implements OnInit {
     dino.training.labels.push(label);
   }
 
-  /**
-   *
-   * @param {object} state
-   * returns an array
-   * converts state to a feature scaled array
-   */
-  public convertStateToVector(state) {
-    if (state) {
-      return [
-        state.obstacleX / CANVAS_WIDTH,
-        state.obstacleWidth / CANVAS_WIDTH,
-        state.speed / 100
-      ];
-    }
-    return [0, 0, 0];
-  }
-
-  // public async train(): Promise<any> {
-  //   // define a model for linear regression
-  //   this.linearModel = tf.sequential();
-  //   this.linearModel.add(tf.layers.dense({ units: 1, inputShape: [1] }));
-  //
-  //   // prepare the model for training: Specify the loss and the optimizers
-  //   this.linearModel.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
-  //
-  //   // training data, random shit
-  //   const xs = tf.tensor1d([3.2, 4.4, 5.5, 0.1, 7.5, 8.1, 5.3]);
-  //   const ys = tf.tensor1d([1.6, 2.7, 3.5, 1.2, 9.2, 4.0, 1.9]);
-  //
-  //   // train
-  //   await this.linearModel.fit(xs, ys);
-  //
-  //   console.log('this thing trained son');
-  //
-  // }
-  //
-  // public predict(val: any): void {
-  //   // todo
-  //   console.log(val);
-  //   const output = this.linearModel.predict(tf.tensor2d([parseFloat(val)], [1, 1])) as any;
-  //   console.log(output);
-  //   this.prediction = Array.from(output.dataSync())[0];
-  // }
 }
