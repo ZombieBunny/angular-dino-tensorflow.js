@@ -104,6 +104,7 @@ export class AppComponent implements OnInit {
           state.speed / 100
         ] : [0, 0, 0];
 
+        console.log('predict',_state);
         const prediction = dino.model.predict(tf.tensor2d([_state]));
 
         // the predict function returns a tensor we get the data in a promise as result
@@ -111,7 +112,7 @@ export class AppComponent implements OnInit {
         const predictionPromise = prediction.data();
 
         predictionPromise.then((result) => {
-          // console.log(result);
+          console.log('result',result);
           // converting prediction to action
           if (result[1] > result[0]) {
             // we want to jump
