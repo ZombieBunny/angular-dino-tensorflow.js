@@ -1,6 +1,6 @@
 # Angular-Dino-TensorFlow
 
-[## Live Demo](https://zombiebunny.github.io/angular-dino-tensorflow.js/)
+[Click here for live demo](https://zombiebunny.github.io/angular-dino-tensorflow.js/)
 ## To run app
 
 1. docker-compose build
