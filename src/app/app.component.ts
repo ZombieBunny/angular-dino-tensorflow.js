@@ -49,10 +49,12 @@ export class AppComponent implements OnInit {
 
       // creating a tensorflow sequential model
       dino.model = tf.sequential();
-      // dino.model.init();
-      // adding the first hidden layer to the model using with 3 inputs ,
-      // sigmoid activation function
-      // and output of 6
+
+      /* 
+      adding the first hidden layer to the model using with 3 inputs ,
+      sigmoid activation function
+      and output of 6
+      */
       dino.model.add(tf.layers.dense({
         inputShape: [3],
         activation: 'sigmoid',
@@ -104,7 +106,7 @@ export class AppComponent implements OnInit {
           state.speed / 100
         ] : [0, 0, 0];
 
-        console.log('predict',_state);
+        console.log('predict', _state);
         const prediction = dino.model.predict(tf.tensor2d([_state]));
 
         // the predict function returns a tensor we get the data in a promise as result
@@ -112,7 +114,7 @@ export class AppComponent implements OnInit {
         const predictionPromise = prediction.data();
 
         predictionPromise.then((result) => {
-          console.log('result',result);
+          console.log('result', result);
           // converting prediction to action
           if (result[1] > result[0]) {
             // we want to jump
@@ -134,36 +136,24 @@ export class AppComponent implements OnInit {
   }
 
   public handleCrash(dino) {
-    // console.log('crash');
     let input = null;
     let label = null;
-    // check if at the time of crash dino was jumping or not
     if (dino.jumping) {
-      // Should not jump next time
-      // convert state object to array
       input = dino.lastJumpingState ? [
         dino.lastJumpingState.obstacleX / CANVAS_WIDTH,
         dino.lastJumpingState.obstacleWidth / CANVAS_WIDTH,
         dino.lastJumpingState.speed / 100
       ] : [0, 0, 0];
-
-      // input = this.convertStateToVector(dino.lastJumpingState);
       label = [1, 0];
     } else {
-      // Should jump next time
-      // convert state object to array
       input = dino.lastRunningState ? [
         dino.lastRunningState.obstacleX / CANVAS_WIDTH,
         dino.lastRunningState.obstacleWidth / CANVAS_WIDTH,
         dino.lastRunningState.speed / 100
       ] : [0, 0, 0];
-
-      // input = this.convertStateToVector(dino.lastRunningState);
       label = [0, 1];
     }
-    // push the new input to the training set
     dino.training.inputs.push(input);
-    // push the label to labels
     dino.training.labels.push(label);
   }
 
